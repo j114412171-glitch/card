@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    #gacha-container { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f9; border-radius: 15px; }
+    .btn-group { margin-bottom: 20px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; border: none; border-radius: 5px; background: #6200ee; color: white; margin: 5px; transition: 0.3s; }
+    button:hover { background: #3700b3; }
+    #result-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; min-height: 150px; }
+    .card { width: 80px; height: 120px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; animation: flip 0.5s ease-out; }
+    .ssr { background: linear-gradient(45deg, #ffd700, #ff8c00); box-shadow: 0 0 10px #ffad00; border: 2px solid #fff; }
+    .sr { background: linear-gradient(45deg, #a335ee, #6200ee); }
+    .r { background: #9e9e9e; }
+    @keyframes flip { from { transform: scale(0); rotate: Y(180deg); } to { transform: scale(1); rotate: Y(0); } }
+</style>
+</head>
+<body>
+
+<div id="gacha-container">
+    <h2>✨ 傳說召喚祭 ✨</h2>
+    <div class="btn-group">
+        <button onclick="draw(1)">單抽</button>
+        <button onclick="draw(10)">十連抽！</button>
+    </div>
+    <div id="result-display">
+        </div>
+</div>
+
+<script>
+    const pool = [
+        { name: 'SSR', weight: 5, colorClass: 'ssr' },
+        { name: 'SR', weight: 15, colorClass: 'sr' },
+        { name: 'R', weight: 80, colorClass: 'r' }
+    ];
+
+    function draw(times) {
+        const display = document.getElementById('result-display');
+        display.innerHTML = ''; // 清空上次結果
+
+        for (let i = 0; i < times; i++) {
+            const result = getGachaResult();
+            const card = document.createElement('div');
+            card.className = `card ${result.colorClass}`;
+            card.innerText = result.name;
+            display.appendChild(card);
+        }
+    }
+
+    function getGachaResult() {
+        let rand = Math.random() * 100;
+        let cumulativeWeight = 0;
+        for (const item of pool) {
+            cumulativeWeight += item.weight;
+            if (rand < cumulativeWeight) return item;
+        }
+    }
+</script>
+
+</body>
+</html>
